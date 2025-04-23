@@ -15,45 +15,39 @@ const iconMap = {
 };
 
 export default async function CardWrapper() {
+  const {
+    numberOfInvoices,
+    numberOfCustomers,
+    totalPaidInvoices,
+    totalPendingInvoices,
+  } = await fetchCardData();
+ 
   return (
     <>
-      {/* NOTE: Uncomment this code in Chapter 9 */}
 
-      {/* <Card title="Collected" value={totalPaidInvoices} type="collected" />
+      <Card title="Collected" value={totalPaidInvoices} type="collected" />
       <Card title="Pending" value={totalPendingInvoices} type="pending" />
       <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
       <Card
         title="Total Customers"
         value={numberOfCustomers}
         type="customers"
-      /> */}
+      />
     </>
   );
 }
 
-export async function Card({
+export function Card({
   title,
+  value,
   type,
 }: {
   title: string;
+  value: number | string;
   type: 'invoices' | 'customers' | 'pending' | 'collected';
 }) {
   const Icon = iconMap[type];
-  let data;
-  switch (type) {
-    case 'invoices':
-      data = (await fetchCardData()).numberOfInvoices;
-      break;
-    case 'customers':
-      data = (await fetchCardData()).numberOfCustomers;
-      break;
-    case 'pending':
-      data = (await fetchCardData()).totalPaidInvoices;
-    case 'collected':
-      data = (await fetchCardData()).totalPendingInvoices;
-      break;
-  }
-  
+
   return (
     <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
       <div className="flex p-4">
@@ -64,7 +58,7 @@ export async function Card({
         className={`${montserrat.className}
           truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
       >
-        {data}
+        {value}
       </p>
     </div>
   );
