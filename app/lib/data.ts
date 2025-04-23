@@ -49,7 +49,7 @@ export async function fetchLatestInvoices() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest invoices.');
-  }
+  } 
 }
 
 export async function fetchCardData() {
@@ -57,6 +57,8 @@ export async function fetchCardData() {
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
     // how to initialize multiple queries in parallel with JS.
+    
+    await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * 3000) + 1000));
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const invoiceStatusPromise = sql`SELECT

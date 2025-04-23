@@ -5,6 +5,7 @@ import {
   InboxIcon,
 } from '@heroicons/react/24/outline';
 import { montserrat } from '@/app/fonts';
+import { fetchCardData } from '@/app/lib/data';
 
 const iconMap = {
   collected: BanknotesIcon,
@@ -30,17 +31,29 @@ export default async function CardWrapper() {
   );
 }
 
-export function Card({
+export async function Card({
   title,
-  value,
   type,
 }: {
   title: string;
-  value: number | string;
   type: 'invoices' | 'customers' | 'pending' | 'collected';
 }) {
   const Icon = iconMap[type];
-
+  let data;
+  switch (type) {
+    case 'invoices':
+      data = (await fetchCardData()).numberOfInvoices;
+      break;
+    case 'customers':
+      data = (await fetchCardData()).numberOfCustomers;
+      break;
+    case 'pending':
+      data = (await fetchCardData()).totalPaidInvoices;
+    case 'collected':
+      data = (await fetchCardData()).totalPendingInvoices;
+      break;
+  }
+  
   return (
     <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
       <div className="flex p-4">
@@ -51,7 +64,7 @@ export function Card({
         className={`${montserrat.className}
           truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
       >
-        {value}
+        {data}
       </p>
     </div>
   );
